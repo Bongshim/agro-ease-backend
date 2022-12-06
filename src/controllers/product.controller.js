@@ -38,6 +38,12 @@ const deleteProduct = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).json({ message: 'deleted successfully' });
 });
 
+// admin
+const getAdminProducts = catchAsync(async (req, res) => {
+  const products = await productService.getAdminProducts();
+  res.status(httpStatus.OK).json(products);
+});
+
 module.exports = {
   createProduct,
   getProducts,
@@ -45,4 +51,5 @@ module.exports = {
   getProduct,
   updateProduct,
   deleteProduct,
+  getAdminProducts,
 };

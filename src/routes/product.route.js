@@ -14,6 +14,9 @@ router
   .post(auth(), upload.array('images', 5), formDataStringConvert('product'), productController.createProduct)
   .get(productController.getProducts);
 
+// admin
+router.route('/admin').get(auth('adminManageProducts'), productController.getAdminProducts);
+
 router
   .route('/:productId')
   .get(validate(productValidation.getProduct), productController.getProduct)

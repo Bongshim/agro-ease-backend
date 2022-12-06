@@ -28,6 +28,17 @@ const getProducts = async () => {
 };
 
 /**
+ * Get all storeproducts by admin
+ * @returns {Promise<stores>}
+ */
+const getAdminProducts = async () => {
+  const Products = await Product.findAll({
+    include: [{ model: ProductImages }],
+  });
+  return Products;
+};
+
+/**
  * Get all storeproducts
  * @param {ObjectId} storeId
  * @returns {Promise<stores>}
@@ -166,4 +177,5 @@ module.exports = {
   getProductsById,
   updateProductById,
   deleteProductById,
+  getAdminProducts,
 };
