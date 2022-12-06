@@ -12,4 +12,9 @@ router
   .patch(auth(), storeController.updateStore)
   .delete(auth(), storeController.deleteStore);
 
+router
+  .route('/:storeId/:walletId')
+  .patch(auth(), storeController.updateStoreWallet)
+  .delete(auth(), storeController.deleteStoreWallet);
+
 module.exports = router;

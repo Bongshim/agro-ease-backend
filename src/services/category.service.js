@@ -10,7 +10,6 @@ const { userService } = require('./index');
  */
 const createCategory = async (userId, requestBody) => {
   const { type } = await userService.getUserById(userId);
-
   if (type === 'admin') {
     const category = await Category.create(requestBody);
     return category;
@@ -35,6 +34,19 @@ const getCategories = async () => {
  */
 const getCategoryById = async (id) => {
   const category = await Category.findOne({ where: { id } });
+  if (!category) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Category not found');
+  }
+  return category;
+};
+
+/**
+ * Get category by name
+ * @param {ObjectId} id
+ * @returns {Promise<Category>}
+ */
+const getCategoryByName = async (name) => {
+  const category = await Category.findOne({ where: { name } });
   if (!category) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Category not found');
   }
@@ -96,4 +108,5 @@ module.exports = {
   getCategoryById,
   updateCategoryById,
   deleteCategoryById,
+  getCategoryByName,
 };

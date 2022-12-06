@@ -1,11 +1,12 @@
 const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError');
+const { sequelize } = require('../config/database');
 const { Store } = require('../models/Store');
 const { Wallet } = require('../models/Wallet');
 const { User } = require('../models/User');
 // eslint-disable-next-line camelcase
 const { Business_address } = require('../models/Business_address');
-const { userService, walletService } = require('./index');
+const { userService } = require('./index');
 
 /**
  * Get all stores
@@ -45,6 +46,27 @@ const getStoreById = async (id) => {
 };
 
 /**
+ * Get store by id
+ * @param {ObjectId} id
+ * @returns {Promise<Store>}
+ */
+const getStoreByUserId = async (UserId) => {
+  const store = await Store.findOne({
+    where: { UserId },
+    attributes: { exclude: ['createdAt', 'updatedAt'] },
+    include: [
+      { model: User, attributes: { exclude: ['createdAt', 'updatedAt'] } },
+      { model: Business_address, attributes: { exclude: ['createdAt', 'updatedAt'] } },
+      { model: Wallet, attributes: { exclude: ['createdAt', 'updatedAt'] } },
+    ],
+  });
+  if (!store) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Store not found');
+  }
+  return store;
+};
+
+/**
  * Create a new store
  * @param {number} userId
  * @param {object} requestBody
@@ -59,24 +81,30 @@ const createStore = async (userId, requestBody) => {
 
   const { wallet, store } = requestBody;
 
-  wallet.type = 'store';
-  const { id: walletId } = await walletService.createWallet(userId, wallet);
+  const walletBody = { ...wallet, type: 'store' };
+  let createdStoreInfo;
 
-  store.WalletId = walletId;
+  try {
+    await sequelize.transaction(async (t) => {
+      const storeWallet = await Wallet.create(walletBody, { transaction: t });
 
-  store.UserId = userId;
-  const { id: createdStoreId } = await Store.create(store);
+      store.WalletId = storeWallet.dataValues.id;
 
-  const updateUserBody = {
-    type: 'farmer',
-    StoreId: createdStoreId,
-  };
+      store.UserId = userId;
 
-  userService.updateUserById(userId, updateUserBody);
+      createdStoreInfo = await Store.create(store, { transaction: t });
 
-  const createdStore = await getStoreById(createdStoreId);
+      const updateUserBody = {
+        type: 'farmer',
+        StoreId: createdStoreInfo.dataValues.id,
+      };
 
-  return createdStore;
+      await User.update(updateUserBody, { where: { id: userId }, transaction: t });
+    });
+    return await getStoreById(createdStoreInfo.dataValues.id);
+  } catch (error) {
+    throw new ApiError(httpStatus.BAD_REQUEST, error);
+  }
 };
 
 /**
@@ -105,7 +133,7 @@ const updateStoreById = async (userId, storeId, updateBody) => {
     });
   }
 
-  throw new ApiError(httpStatus.UNAUTHORIZED, 'Cannot Create category');
+  throw new ApiError(httpStatus.UNAUTHORIZED, 'Cannot update store');
 };
 
 /**
@@ -136,4 +164,5 @@ module.exports = {
   getStoreById,
   updateStoreById,
   deleteStoreById,
+  getStoreByUserId,
 };

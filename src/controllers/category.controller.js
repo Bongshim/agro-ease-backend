@@ -4,7 +4,7 @@ const catchAsync = require('../utils/catchAsync');
 
 const createCategory = catchAsync(async (req, res) => {
   // req.userId to be assigned to userId
-  const userId = 1;
+  const { userId } = req;
   const category = await categoryService.createCategory(userId, req.body);
 
   res.status(httpStatus.CREATED).json(category);
@@ -22,14 +22,14 @@ const getCategoryById = catchAsync(async (req, res) => {
 
 const updateCategory = catchAsync(async (req, res) => {
   // req.userId to be assigned to userId
-  const userId = 1;
+  const { userId } = req;
   await categoryService.updateCategoryById(userId, req.params.categoryId, req.body);
   res.status(httpStatus.OK).json({ message: 'updated successfully' });
 });
 
 const deleteCategoryById = catchAsync(async (req, res) => {
   // req.userId to be assigned to userId
-  const userId = 1;
+  const { userId } = req;
   await categoryService.deleteCategoryById(userId, req.params.categoryId);
   res.status(httpStatus.OK).json({ message: 'deleted successfully' });
 });

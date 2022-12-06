@@ -72,11 +72,11 @@
 - *user id*
 - comment
 - total actual price
-- total quantity
-- status ( cart abandoned || pending | shipped | refunded | completed )
+- status ( pending | shipped | refunded | completed )
 
 ### Order row
 - *product id*
+- unitName
 - quantity
 - price
 - actual price
@@ -91,6 +91,12 @@
 - Admin types ( store manager, account manager)
 
 - Review product - update product
+
+# Note functionalities
+- Changing markup affects prices or products
+- New function for product calculations
+- Change table attributes - actual price to fee
+- Settle farmer's balance after sale
 
 
 

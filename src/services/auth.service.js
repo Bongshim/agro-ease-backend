@@ -2,8 +2,9 @@ const httpStatus = require('http-status');
 const bcrypt = require('bcryptjs');
 const tokenService = require('./token.service');
 const userService = require('./user.service');
-// const { db } = require('../models');
+const { Store } = require('../models/Store');
 const { Token } = require('../models/Token');
+const { User } = require('../models/User');
 const ApiError = require('../utils/ApiError');
 const { tokenTypes } = require('../config/tokens');
 const logger = require('../config/logger');
@@ -19,7 +20,12 @@ const loginUserWithEmailAndPassword = async (email, password) => {
   if (!user || !(await userService.isPasswordMatch(password, user.dataValues))) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Incorrect email or password');
   }
-  return user;
+  const userInfo = await User.findOne({
+    where: { email },
+    attributes: { exclude: ['createdAt', 'updatedAt', 'password'] },
+    include: [{ model: Store, attributes: { exclude: ['createdAt', 'updatedAt'] } }],
+  });
+  return userInfo;
 };
 
 /**
@@ -35,7 +41,7 @@ const logout = async (refreshToken) => {
   logger.info(refreshTokenDoc);
 
   if (!refreshTokenDoc) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Not found');
+    throw new ApiError(httpStatus.NOT_FOUND, 'Refresh token not found');
   }
   // DELETE TOKEN AFTERWARDS
   await Token.destroy({ where: { id: refreshTokenDoc.id } });
@@ -58,7 +64,7 @@ const refreshAuth = async (refreshToken) => {
     // await refreshTokenDoc.remove();
     return tokenService.generateAuthTokens(user.id);
   } catch (error) {
-    throw new ApiError(httpStatus.UNAUTHORIZED, `Please authenticate${error}`);
+    throw new ApiError(httpStatus.UNAUTHORIZED, error);
   }
 };
 
@@ -109,10 +115,21 @@ const verifyEmail = async (verifyEmailToken) => {
   }
 };
 
+/**
+ * current user
+ * @param {string} userId
+ * @returns {Promise}
+ */
+const getCurrentUser = async (userId) => {
+  const user = await userService.getUserById(userId);
+  return user;
+};
+
 module.exports = {
   loginUserWithEmailAndPassword,
   logout,
   refreshAuth,
   resetPassword,
   verifyEmail,
+  getCurrentUser,
 };

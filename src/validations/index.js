@@ -1,1 +1,9 @@
 module.exports.userValidation = require('./user.validation');
+module.exports.authValidation = require('./auth.validation');
+module.exports.billingAddressValidation = require('./billingAddress.validation');
+module.exports.deliveryAddressValidation = require('./deliveryAddress.validation');
+module.exports.businessAddressValidation = require('./businessAddress.validation');
+module.exports.categoryValidation = require('./category.validation');
+module.exports.productUnitValidation = require('./productUnit.validation');
+module.exports.orderStatusValidation = require('./orderStatus.validation');
+module.exports.productValidation = require('./product.validation');

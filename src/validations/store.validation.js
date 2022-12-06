@@ -1,10 +1,18 @@
-const Joi = require('joi');
+/* eslint-disable prettier/prettier */
+const BaseJoi = require('joi');
+const ImageExtension = require('joi-image-extension');
+
+const Joi = BaseJoi.extend(ImageExtension);
 
 const createStore = {
   body: Joi.object().keys({
     name: Joi.string().required(),
     description: Joi.string().max(400),
-    account_number: Joi.number(),
+    business_email: Joi.string().email(),
+    phone_number: Joi.number(),
+    farmer_image: Joi.image().allowTypes(['jpg', 'png']),
+    store_image: Joi.image().allowTypes(['jpg', 'png']),
+    
     bank: Joi.string(),
     account_name: Joi.string(),
     date_of_birth: Joi.date(),

@@ -7,6 +7,11 @@ const businessAddressRoutes = require('./businessAddress.route');
 const walletRoutes = require('./wallet.route');
 const storeRoutes = require('./store.route');
 const categoryRoutes = require('./category.route');
+const productRoutes = require('./product.route');
+const productImagesRoutes = require('./productImages.route');
+const productUnitRoutes = require('./productUnit.route');
+const orderStatusRoutes = require('./orderStatus.route');
+const orderRoutes = require('./order.route');
 
 const router = express.Router();
 
@@ -19,6 +24,11 @@ const defaultRoutes = [
   { path: '/auth', route: authRoutes },
   { path: '/store', route: storeRoutes },
   { path: '/category', route: categoryRoutes },
+  { path: '/product/images', route: productImagesRoutes },
+  { path: '/product', route: productRoutes },
+  { path: '/units', route: productUnitRoutes },
+  { path: '/orders/status', route: orderStatusRoutes },
+  { path: '/orders', route: orderRoutes },
 ];
 
 defaultRoutes.forEach((route) => {

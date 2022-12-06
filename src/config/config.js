@@ -65,4 +65,9 @@ module.exports = {
   url: {
     baseurl: envVars.BASE_URL,
   },
+  cloudinary: {
+    CLOUD_NAME: envVars.CLOUD_NAME,
+    CLOUDINARY_API_KEY: envVars.CLOUDINARY_API_KEY,
+    CLOUDINARY_API_SECRET: envVars.CLOUDINARY_API_SECRET,
+  },
 };

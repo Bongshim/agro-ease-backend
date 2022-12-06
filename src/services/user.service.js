@@ -120,7 +120,7 @@ const getStoreId = async (id) => {
  */
 const getUserByEmail = async (email) => {
   // eslint-disable-next-line no-return-await
-  return await User.findOne({ where: { email } });
+  return await User.findOne({ where: { email }, attributes: { exclude: ['createdAt', 'updatedAt'] } });
 };
 
 /**

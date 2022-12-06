@@ -1,13 +1,11 @@
-const config = require('../config/config');
-const logger = require('../config/logger');
-const moment = require('moment');
-const { tokenTypes } = require('../config/tokens');
+const httpStatus = require('http-status');
 const { sign, verify } = require('jsonwebtoken');
+const moment = require('moment');
+const config = require('../config/config');
+const { tokenTypes } = require('../config/tokens');
 const { Token } = require('../models/Token');
 const { getUserByEmail } = require('./user.service');
 const ApiError = require('../utils/ApiError');
-const httpStatus = require('http-status');
-
 
 /**
  * Generate token
@@ -96,7 +94,6 @@ const verifyToken = async (token, type) => {
  * @returns {Promise<string>}
  */
 const generateResetPasswordToken = async (email) => {
- 
   const user = await getUserByEmail(email);
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
@@ -114,8 +111,8 @@ const generateResetPasswordToken = async (email) => {
  */
 const generateVerifyEmailToken = async (user) => {
   const expires = moment().add(config.jwt.verifyEmailExpirationMinutes, 'minutes');
-  const verifyEmailToken = generateToken(user.id, expires, tokenTypes.VERIFY_EMAIL);
-  await saveToken(verifyEmailToken, user.id, expires, tokenTypes.VERIFY_EMAIL);
+  const verifyEmailToken = generateToken(user, expires, tokenTypes.VERIFY_EMAIL);
+  await saveToken(verifyEmailToken, user, expires, tokenTypes.VERIFY_EMAIL);
   return verifyEmailToken;
 };
 

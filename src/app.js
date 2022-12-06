@@ -2,10 +2,10 @@ const express = require('express');
 require('colors');
 const helmet = require('helmet');
 const xss = require('xss-clean');
-const routes = require('./routes');
 const httpStatus = require('http-status');
 const passport = require('passport');
 const cors = require('cors');
+const routes = require('./routes');
 const config = require('./config/config');
 const morgan = require('./config/morgan');
 const { jwtStrategy } = require('./config/passport');
@@ -54,7 +54,7 @@ app.get('/', (req, res) => {
 
 // send back a 404 error for any unknown api request
 app.use((req, res, next) => {
-  next(new ApiError(httpStatus.NOT_FOUND, 'Not found'));
+  next(new ApiError(httpStatus.NOT_FOUND, 'Route Not found'));
 });
 
 // convert error to ApiError, if needed

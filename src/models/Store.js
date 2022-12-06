@@ -33,9 +33,4 @@ exports.Store = sequelize.define('Store', {
     trim: true,
     allowNull: false,
   },
-  store_image: {
-    type: DataTypes.STRING,
-    trim: true,
-    allowNull: false,
-  },
 });
