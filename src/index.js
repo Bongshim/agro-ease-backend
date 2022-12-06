@@ -13,7 +13,7 @@ try {
   association();
 
   // sync all models
-  sequelize.sync();
+  sequelize.sync({alter:true});
 
   logger.info(`All models synced`.cyan);
 
