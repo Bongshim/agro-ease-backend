@@ -10,8 +10,8 @@ const createWallet = catchAsync(async (req, res) => {
 });
 
 const getWallets = catchAsync(async (req, res) => {
-  const wallets = await walletService.getWallets();
-  res.status(httpStatus.OK).json(wallets);
+  const banks = await walletService.getWallets();
+  res.status(httpStatus.OK).json(banks);
 });
 
 const getWallet = catchAsync(async (req, res) => {
@@ -33,10 +33,15 @@ const deleteWallet = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).json({ message: 'deleted successfully' });
 });
 
+const getBanks = catchAsync(async (req, res) => {
+  const banks = await walletService.getBanks();
+  res.status(httpStatus.OK).json(banks);
+});
 module.exports = {
   createWallet,
   getWallets,
   getWallet,
   updateWallet,
   deleteWallet,
+  getBanks,
 };

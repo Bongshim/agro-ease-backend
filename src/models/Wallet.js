@@ -36,4 +36,8 @@ exports.Wallet = sequelize.define('Wallet', {
     defaultValue: false,
     allowNull: false,
   },
+  receipient_code: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 });

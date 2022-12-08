@@ -14,22 +14,13 @@ exports.uploads = (file, folder) => {
     cloudinary.uploader.upload(file, (result) => {
       resolve({
         url: result.url,
-        public_id:result.public_id
+        public_id: result.public_id,
       });
     });
   });
 };
 
-exports.delete = async(file) =>{
-//   return new Promise((resolve)=>{
-//     cloudinary.uploader.destroy(file,async (result)=>{
-//       console.log(result)
-//      // eslint-disable-next-line no-return-await
-//      resolve(result)
-//     })
-//   })
- const blue = await cloudinary.uploader.destroy(file);
- console.log(blue);
- return blue;
-        
-}
+exports.delete = async (file) => {
+  // eslint-disable-next-line no-return-await
+  return await cloudinary.uploader.destroy(file);
+};

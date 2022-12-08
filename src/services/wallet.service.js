@@ -2,6 +2,8 @@ const httpStatus = require('http-status');
 const { Wallet } = require('../models/Wallet');
 const { Store } = require('../models/Store');
 const { userService } = require('./index');
+const banks = require('../utils/banks');
+const { getRecpientCode } = require('../config/paystackV2');
 const ApiError = require('../utils/ApiError');
 
 /**
@@ -16,9 +18,13 @@ const createWallet = async (userId, walletBody) => {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Wallet exists');
   }
 
+  // eslint-disable-next-line camelcase
+  const receipient_code = await getRecpientCode(walletBody);
+  const walletz = { ...walletBody, receipient_code };
+
   const user = await userService.getUserById(userId);
 
-  const wallet = await Wallet.create(walletBody);
+  const wallet = await Wallet.create(walletz);
 
   wallet.setUser(user);
 
@@ -139,6 +145,15 @@ const deleteWallet = async (userId, walletId) => {
   throw new ApiError(httpStatus.UNAUTHORIZED, 'Cannot delete');
 };
 
+/**
+ * Get banks
+ * @return {promise<wallets>}
+ */
+const getBanks = async () => {
+  const bankList = Object.keys(banks);
+  return bankList;
+};
+
 module.exports = {
   createWallet,
   getWallets,
@@ -147,4 +162,5 @@ module.exports = {
   updateWallet,
   deleteWallet,
   deleteStoreWallet,
+  getBanks,
 };

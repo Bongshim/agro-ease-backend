@@ -46,6 +46,7 @@ const deleteProductImages = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).json({ status: 'success', message: 'Deleted successfully' });
 });
 
+
 module.exports = {
   createProductImages,
   deleteProductImages,

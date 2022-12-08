@@ -4,6 +4,7 @@ const { productService } = require('../services');
 const catchAsync = require('../utils/catchAsync');
 
 const createProduct = catchAsync(async (req, res) => {
+  
   const { userId, files, body } = req;
   await productService.createProduct(userId, body, files);
   res.status(httpStatus.CREATED).json({status: 'success', message: 'product created'});

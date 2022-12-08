@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError');
 const { sequelize } = require('../config/database');
@@ -7,6 +8,7 @@ const { User } = require('../models/User');
 // eslint-disable-next-line camelcase
 const { Business_address } = require('../models/Business_address');
 const { userService } = require('./index');
+const { getRecpientCode } = require('../config/paystackV2');
 
 /**
  * Get all stores
@@ -80,8 +82,8 @@ const createStore = async (userId, requestBody) => {
   }
 
   const { wallet, store } = requestBody;
-
-  const walletBody = { ...wallet, type: 'store' };
+  const receipient_code = await getRecpientCode(wallet);
+  const walletBody = { ...wallet, type: 'store', receipient_code };
   let createdStoreInfo;
 
   try {
@@ -165,4 +167,5 @@ module.exports = {
   updateStoreById,
   deleteStoreById,
   getStoreByUserId,
+  getRecpientCode,
 };

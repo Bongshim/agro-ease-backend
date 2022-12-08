@@ -70,4 +70,7 @@ module.exports = {
     CLOUDINARY_API_KEY: envVars.CLOUDINARY_API_KEY,
     CLOUDINARY_API_SECRET: envVars.CLOUDINARY_API_SECRET,
   },
+  paystack: {
+    secret: envVars.PAYSTACK_SECRET,
+  },
 };
