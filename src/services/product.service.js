@@ -128,8 +128,10 @@ const updateProductById = async (userId, id, updateBody, images) => {
 
   if (type === 'admin' || store.UserId === userId) {
     if(images){
-      const createdImage = await createProductImage(images);
-      product.setProduct_Images(createdImage);
+      const newImages = images.map((image)=> {
+        return {...image, ProductId:id}
+      })
+      await createProductImage(newImages);
     }
     if (updateBody) {
       Object.assign(product, updateBody);
