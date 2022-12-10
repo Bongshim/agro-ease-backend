@@ -44,6 +44,19 @@ const createProductImage = async (productImages) => {
   return ProductImages.bulkCreate(urls);
 };
 
+/**
+ * update product images
+ * @param {Object} productImages
+ * @param {ObjectId} id
+ * @returns {Promise<Object>}
+ */
+const updateProductImage = async (productImages, id) => {
+  const urls = await upload(productImages);
+  const newImages = urls.map((image)=> {
+    return {...image, ProductId:id}})
+  return ProductImages.bulkCreate(newImages);
+};
+
 // eslint-disable-next-line camelcase
 const deleteProductImage = async (public_id) => {
   const productImage = await ProductImages.findOne({ where: { public_id } });
@@ -75,5 +88,6 @@ const bulkDelete = async (images) => {
 module.exports = {
   createProductImage,
   deleteProductImage,
+  updateProductImage,
   bulkDelete,
 };

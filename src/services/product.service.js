@@ -5,7 +5,7 @@ const { Store } = require('../models/Store');
 const { Category } = require('../models/Category');
 const { ProductImages } = require('../models/ProductImages');
 const { storeService, userService, categoryService } = require('./index');
-const { createProductImage, bulkDelete } = require('./productImages.service');
+const { createProductImage, bulkDelete, updateProductImage } = require('./productImages.service');
 const { Product } = require('../models/product');
 
 /**
@@ -128,10 +128,7 @@ const updateProductById = async (userId, id, updateBody, images) => {
 
   if (type === 'admin' || store.UserId === userId) {
     if(images){
-      const newImages = images.map((image)=> {
-        return {...image, ProductId:id}
-      })
-      await createProductImage(newImages);
+      await updateProductImage(newImages, id);
     }
     if (updateBody) {
       Object.assign(product, updateBody);
