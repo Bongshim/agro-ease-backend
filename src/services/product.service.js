@@ -128,7 +128,7 @@ const updateProductById = async (userId, id, updateBody, images) => {
 
   if (type === 'admin' || store.UserId === userId) {
     if(images){
-      await updateProductImage(newImages, id);
+      await updateProductImage(images, id);
     }
     if (updateBody) {
       Object.assign(product, updateBody);
