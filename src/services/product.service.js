@@ -127,8 +127,10 @@ const updateProductById = async (userId, id, updateBody, images) => {
   const { type } = await userService.getUserById(userId);
 
   if (type === 'admin' || store.UserId === userId) {
-    const createdImage = await createProductImage(images);
-    product.setProduct_Images(createdImage);
+    if(images){
+      const createdImage = await createProductImage(images);
+      product.setProduct_Images(createdImage);
+    }
     if (updateBody) {
       Object.assign(product, updateBody);
       // eslint-disable-next-line no-return-await
