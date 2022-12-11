@@ -85,6 +85,7 @@ const createStore = async (userId, requestBody) => {
   const receipient_code = await getRecpientCode(wallet);
   const walletBody = { ...wallet, type: 'store', receipient_code };
   let createdStoreInfo;
+  const updateUserBody = {};
 
   try {
     await sequelize.transaction(async (t) => {
@@ -96,10 +97,13 @@ const createStore = async (userId, requestBody) => {
 
       createdStoreInfo = await Store.create(store, { transaction: t });
 
-      const updateUserBody = {
-        type: 'farmer',
-        StoreId: createdStoreInfo.dataValues.id,
-      };
+      const { type } = User.findByPk(userId);
+
+      if (type === 'user') {
+        updateUserBody.type = 'farmer';
+      }
+
+      updateUserBody.StoreId = createdStoreInfo.dataValues.id;
 
       await User.update(updateUserBody, { where: { id: userId }, transaction: t });
     });
