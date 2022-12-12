@@ -7,7 +7,7 @@ const initializeTransaction = catchAsync(async (req, res) => {
   const { body } = req;
   const url = await flutterwaveService.initializePayment(body);
   console.log(url);
-  res.status(httpStatus.OK).redirect(url);
+  res.status(httpStatus.OK).send(url);
 });
 
 const verifyPayment = catchAsync(async (req, res) => {
