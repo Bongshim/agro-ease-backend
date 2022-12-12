@@ -10,4 +10,8 @@ exports.Order = sequelize.define('Order', {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
+  payment_reference: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 });
