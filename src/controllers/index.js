@@ -11,3 +11,5 @@ module.exports.productImageController = require('./productImages.controller');
 module.exports.productUnitController = require('./productUnit.controller');
 module.exports.orderStatusController = require('./orderStatus.controller');
 module.exports.orderController = require('./order.controller');
+module.exports.paystackController = require('./paystack.controller');
+module.exports.flutterwaveController = require('./flutterwave.controller');

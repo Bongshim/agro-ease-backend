@@ -2,6 +2,7 @@ const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError');
 const { Order } = require('../models/Order');
 const { createOrderRow } = require('./orderRow.service');
+const { userService } = require('./index');
 
 /**
  * calculate order total
@@ -32,7 +33,7 @@ const getOrders = async () => {
  * @returns {Promise<order>}
  */
 const getOrder = async (id) => {
-  const order = await Order.findById(id);
+  const order = await Order.findByPk(id);
   if (!order) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Order not found');
   }
@@ -52,7 +53,7 @@ const createOrder = async (userId, requestBody) => {
   if (total !== order.total) {
     throw new ApiError(httpStatus.FORBIDDEN, 'Total must be equal to the sum of all product price');
   }
-  const orderBody = { ...order, UserId: userId, Status: 'pending' };
+  const orderBody = { ...order, UserId: userId, Status: 'paid' };
 
   const createdOrder = await Order.create(orderBody);
 
@@ -63,8 +64,33 @@ const createOrder = async (userId, requestBody) => {
   return createdOrder;
 };
 
+/**
+ * Update order
+ * @param {ObjectId} userId
+ * @param {ObjectId} orderId
+ * @param {object} orderBody
+ * @returns {Promise<updatedOrder>}
+ */
+const updateOrder = async (userId, orderId, orderBody) => {
+  const order = await Order.findByPk(orderId);
+
+  if (!order) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Order not found');
+  }
+
+  const { type } = await userService.getUserById(userId);
+
+  if (type === 'admin') {
+    Object.assign(order, orderBody);
+    // eslint-disable-next-line no-return-await
+    return await Order.update(order.dataValues, { where: { id: orderId }, individualHooks: true });
+  }
+  throw new ApiError(httpStatus.UNAUTHORIZED, 'Cannot edit');
+};
+
 module.exports = {
   getOrders,
   getOrder,
   createOrder,
+  updateOrder,
 };

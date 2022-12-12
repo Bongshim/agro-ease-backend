@@ -12,6 +12,8 @@ const productImagesRoutes = require('./productImages.route');
 const productUnitRoutes = require('./productUnit.route');
 const orderStatusRoutes = require('./orderStatus.route');
 const orderRoutes = require('./order.route');
+const paystackRoutes = require('./paystack.route');
+const flutterwaveRoutes = require('./flutterwave.route');
 
 const router = express.Router();
 
@@ -29,6 +31,8 @@ const defaultRoutes = [
   { path: '/units', route: productUnitRoutes },
   { path: '/orders/status', route: orderStatusRoutes },
   { path: '/orders', route: orderRoutes },
+  { path: '/paystack', route: paystackRoutes },
+  { path: '/flutterwave', route: flutterwaveRoutes },
 ];
 
 defaultRoutes.forEach((route) => {

@@ -7,3 +7,5 @@ module.exports.categoryValidation = require('./category.validation');
 module.exports.productUnitValidation = require('./productUnit.validation');
 module.exports.orderStatusValidation = require('./orderStatus.validation');
 module.exports.productValidation = require('./product.validation');
+module.exports.paystackValidation = require('./paystack.validation');
+module.exports.flutterwaveValidation = require('./flutterwave.validation');

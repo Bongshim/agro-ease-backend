@@ -15,6 +15,7 @@ const { ProductUnit } = require('./ProductUnit');
 const { OrderRow } = require('./OrderRow');
 const { OrderStatus } = require('./OrderStatus');
 const { Order } = require('./Order');
+const { Payout } = require('./Payouts');
 
 exports.association = () => {
   // ONE TO One
@@ -53,6 +54,12 @@ exports.association = () => {
     foreignKey: 'Status',
     targetKey: 'name',
   });
+
+  OrderRow.hasOne(Payout, { onDelete: 'CASCADE' });
+  Payout.belongsTo(OrderRow);
+
+  Wallet.hasOne(Payout, { onDelete: 'CASCADE' });
+  Payout.belongsTo(Wallet);
 
   // ONE TO MANY
   Store.hasMany(Product);

@@ -97,6 +97,7 @@
 - New function for product calculations
 - Change table attributes - actual price to fee
 - Settle farmer's balance after sale
+- Orders should have payment Ids from successful payments on paystack
 
 
 

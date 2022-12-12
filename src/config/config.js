@@ -73,4 +73,8 @@ module.exports = {
   paystack: {
     secret: envVars.PAYSTACK_SECRET,
   },
+  flutterwave: {
+    FLW_SECRET_KEY: envVars.FLW_SECRET_KEY,
+    FLW_PUBLIC_KEY: envVars.FLW_PUBLIC_KEY,
+  },
 };

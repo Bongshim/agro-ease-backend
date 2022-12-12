@@ -16,3 +16,5 @@ module.exports.productUnitService = require('./productUnit.service');
 module.exports.orderRowService = require('./orderRow.service');
 module.exports.orderService = require('./order.service');
 module.exports.orderStatusService = require('./orderStatus.service');
+module.exports.paystackService = require('./paystack.service');
+module.exports.flutterwaveService = require('./flutterwave.service');

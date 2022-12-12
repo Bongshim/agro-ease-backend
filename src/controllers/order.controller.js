@@ -8,7 +8,10 @@ const getOrders = catchAsync(async (req, res) => {
 });
 
 const getOrder = catchAsync(async (req, res) => {
-  const order = await orderService.getOrder();
+  const {
+    params: { orderId },
+  } = req;
+  const order = await orderService.getOrder(orderId);
   res.status(httpStatus.OK).json(order);
 });
 
@@ -18,8 +21,19 @@ const createOrder = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).json(order);
 });
 
+const updateOrder = catchAsync(async (req, res) => {
+  const {
+    userId,
+    body,
+    params: { orderId },
+  } = req;
+  const order = await orderService.updateOrder(userId, orderId, body);
+  res.status(httpStatus.OK).json(order);
+});
+
 module.exports = {
   getOrders,
   getOrder,
   createOrder,
+  updateOrder,
 };

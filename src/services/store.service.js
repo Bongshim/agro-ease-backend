@@ -8,7 +8,7 @@ const { User } = require('../models/User');
 // eslint-disable-next-line camelcase
 const { Business_address } = require('../models/Business_address');
 const { userService } = require('./index');
-const { getRecpientCode } = require('../config/paystackV2');
+// const { createBeneficiary } = require('./flutterwave.service');
 
 /**
  * Get all stores
@@ -82,8 +82,8 @@ const createStore = async (userId, requestBody) => {
   }
 
   const { wallet, store } = requestBody;
-  const receipient_code = await getRecpientCode(wallet);
-  const walletBody = { ...wallet, type: 'store', receipient_code };
+  // const beneficiary_id = await createBeneficiary(wallet);
+  const walletBody = { ...wallet, type: 'store' };
   let createdStoreInfo;
   const updateUserBody = {};
 
@@ -171,5 +171,4 @@ module.exports = {
   updateStoreById,
   deleteStoreById,
   getStoreByUserId,
-  getRecpientCode,
 };

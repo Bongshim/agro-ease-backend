@@ -1,10 +1,14 @@
+/* eslint-disable camelcase */
 const httpStatus = require('http-status');
 const { Wallet } = require('../models/Wallet');
 const { Store } = require('../models/Store');
+const { Payout } = require('../models/Payouts');
 const { userService } = require('./index');
+const { flutterwaveService } = require('./index');
 const banks = require('../utils/banks');
-const { getRecpientCode } = require('../config/paystackV2');
+// const { createBeneficiary } = require('./flutterwave.service');
 const ApiError = require('../utils/ApiError');
+const logger = require('../config/logger');
 
 /**
  * Create a new wallet
@@ -19,8 +23,8 @@ const createWallet = async (userId, walletBody) => {
   }
 
   // eslint-disable-next-line camelcase
-  const receipient_code = await getRecpientCode(walletBody);
-  const walletz = { ...walletBody, receipient_code };
+  // const beneficiary_id = await createBeneficiary(walletBody);
+  const walletz = { ...walletBody };
 
   const user = await userService.getUserById(userId);
 
@@ -154,6 +158,48 @@ const getBanks = async () => {
   return bankList;
 };
 
+/**
+ * Share balance
+ * @return {promise<null>}
+ */
+const shareBalance = async (order) => {
+  const rows = await order.getOrder_Rows();
+  rows.map(async (row) => {
+    const {
+      dataValues: { StoreId, total_price },
+    } = row;
+
+    const store = await Store.findByPk(StoreId);
+
+    const {
+      dataValues: { WalletId },
+    } = store;
+
+    const wallet = await Wallet.findByPk(WalletId);
+    await wallet.increment({ balance: total_price });
+  });
+
+  logger.info('balance shared'.bgWhite.cyan);
+};
+
+const withdrawBalance = async (walletId) => {
+  const wallet = await Wallet.findByPk(walletId);
+  const { balance } = wallet.dataValues;
+  if (balance < 2000) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Must have atleast 2000 to withdraw');
+  }
+  const { status, message, reference, id: payout_id, amount, fee } = await flutterwaveService.initaitePayout(wallet);
+  const payoutData = {
+    status,
+    message,
+    reference,
+    payout_id,
+    amount,
+    fee,
+  };
+  const createPayout = await Payout.create(payoutData);
+};
+
 module.exports = {
   createWallet,
   getWallets,
@@ -163,4 +209,6 @@ module.exports = {
   deleteWallet,
   deleteStoreWallet,
   getBanks,
+  shareBalance,
+  withdrawBalance,
 };
