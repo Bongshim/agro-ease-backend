@@ -31,7 +31,7 @@ const initializePayment = async (details) => {
     ...details,
     tx_ref: uuidv4(),
     currency: 'NGN',
-    redirect_url: 'http://www.localhost:3050/v1/flutterwave/cb/payment',
+    redirect_url: 'https://agro-ease-backend-production.up.railway.app/v1/flutterwave/cb/payment',
   };
   logger.info(`${payload.tx_ref}`.bgGreen);
   const res = await apiCall.post('/payments', payload);
