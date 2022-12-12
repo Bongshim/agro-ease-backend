@@ -97,8 +97,9 @@ const createStore = async (userId, requestBody) => {
 
       createdStoreInfo = await Store.create(store, { transaction: t });
 
-      const { type } = User.findByPk(userId);
+      const user = await User.findByPk(userId);
 
+      const { type } = user.dataValues;
       if (type === 'user') {
         updateUserBody.type = 'farmer';
       }
