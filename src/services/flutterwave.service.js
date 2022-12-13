@@ -52,7 +52,7 @@ const verifyPayment = async (status, tx_ref, transaction_id) => {
   if (status === 'successful') {
     const newUrl = `http://localhost:3000/BuyerOrderSuccesful/?status=${status}&tx_ref=${tx_ref}&transaction_id=${transaction_id}`
     return newUrl;
-  }else if(status === 'failed'){
+  }else if(status === 'failed' || status === 'cancelled'){
     const newUrl = `http://localhost:3000/BuyerOrderfailed/?status=${status}&tx_ref=${tx_ref}&transaction_id=${transaction_id}`
     return newUrl;
   }
