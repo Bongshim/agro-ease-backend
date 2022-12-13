@@ -13,7 +13,7 @@ const initializeTransaction = catchAsync(async (req, res) => {
 const verifyPayment = catchAsync(async (req, res) => {
   const { status, tx_ref, transaction_id } = req.query;
   const data = await flutterwaveService.verifyPayment(status, tx_ref, transaction_id);
-  res.status(httpStatus.OK).json(data);
+  res.status(httpStatus.OK).redirect(data);
 });
 
 module.exports = { verifyPayment, initializeTransaction };
