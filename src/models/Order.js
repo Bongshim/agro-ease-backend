@@ -18,6 +18,10 @@ exports.Order = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    transaction_id: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
   },
   {
     hooks: {
