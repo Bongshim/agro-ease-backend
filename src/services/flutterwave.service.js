@@ -52,6 +52,9 @@ const verifyPayment = async (status, tx_ref, transaction_id) => {
   if (status === 'successful') {
     const newUrl = `http://localhost:3000/BuyerOrderSuccesful/?status=${status}&tx_ref=${tx_ref}&transaction_id=${transaction_id}`
     return newUrl;
+  }else if(status === 'failed'){
+    const newUrl = `http://localhost:3000/BuyerOrderfailed/?status=${status}&tx_ref=${tx_ref}&transaction_id=${transaction_id}`
+    return newUrl;
   }
   throw new ApiError(httpStatus.BAD_REQUEST, status);
 };
